@@ -15,7 +15,7 @@ function Header() {
         <SearchIcon className="header__searchIcon" />
       </div>
       <div className="header__navbar">
-        <Link className="header__navbarItem">
+        <Link className="header__navbarItem" to="/login">
           <div className="header__item">
             <p className="header__itemUp">Hello Jomar</p>
             <p className="header__itemBelow">Sign Out</p>
