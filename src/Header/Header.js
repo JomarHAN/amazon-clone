@@ -3,8 +3,17 @@ import { Link } from "react-router-dom";
 import "./Header.css";
 import SearchIcon from "@material-ui/icons/Search";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import { useStateValue } from "../ContextAPI/StateProvider";
 
 function Header() {
+  const [{}, dispatch] = useStateValue();
+  const headerClick = () => {
+    dispatch({
+      type: "STOP_SLIDE",
+      slideState: false,
+    });
+  };
+
   return (
     <div className="header">
       <Link to="/" className="header__logo">
@@ -15,7 +24,7 @@ function Header() {
         <SearchIcon className="header__searchIcon" />
       </div>
       <div className="header__navbar">
-        <Link className="header__navbarItem" to="/login">
+        <Link className="header__navbarItem" to="/login" onClick={headerClick}>
           <div className="header__item">
             <p className="header__itemUp">Hello Jomar</p>
             <p className="header__itemBelow">Sign Out</p>

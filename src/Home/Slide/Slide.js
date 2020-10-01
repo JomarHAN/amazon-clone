@@ -1,7 +1,9 @@
 import React, { useEffect } from "react";
+import { useStateValue } from "../../ContextAPI/StateProvider";
 import "./Slide.css";
 
 function Slide() {
+  const [{ slideState }] = useStateValue();
   useEffect(() => {
     const autoSlide = () => {
       const list = document.querySelectorAll(".slide ul li");
@@ -23,8 +25,11 @@ function Slide() {
         }
       }, 5000);
     };
-    autoSlide();
-  });
+    if (slideState) {
+      autoSlide();
+      console.log(slideState);
+    }
+  }, [slideState]);
   return (
     <div className="slide">
       <ul>
