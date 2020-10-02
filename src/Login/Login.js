@@ -1,14 +1,33 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useHistory } from "react-router-dom";
+import { useStateValue } from "../ContextAPI/StateProvider";
+import { auth } from "../firebase";
 import "./Login.css";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const history = useHistory();
 
-  const handleSignIn = () => {};
+  const handleSignIn = (e) => {
+    e.preventDefault();
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .then((authUser) => {
+        history.push("/");
+      })
+      .catch((error) => alert(error.message));
+  };
 
-  const handleRegister = () => {};
+  const handleRegister = (e) => {
+    e.preventDefault();
+    auth
+      .createUserWithEmailAndPassword(email, password)
+      .then((authUser) => {
+        history.push("/");
+      })
+      .catch((error) => alert(error.message));
+  };
 
   return (
     <div className="login">

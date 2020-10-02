@@ -1,5 +1,6 @@
 export const initialState = {
-    slideState: true
+    slideState: true,
+    user: null
 }
 
 const reducer = (state, action) => {
@@ -9,6 +10,11 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 slideState: action.slideState
+            }
+        case "SET_USER":
+            return {
+                ...state,
+                user: action.user
             }
 
         default:

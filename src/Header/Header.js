@@ -1,18 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Header.css";
 import SearchIcon from "@material-ui/icons/Search";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import { useStateValue } from "../ContextAPI/StateProvider";
+import { auth } from "../firebase";
 
 function Header() {
-  const [{}, dispatch] = useStateValue();
+  const [{ user }] = useStateValue();
 
-  const headerClick = () => {
-    dispatch({
-      type: "STOP_SLIDE",
-      slideState: false,
-    });
+  // const headerClick = () => {
+  //   dispatch({
+  //     type: "STOP_SLIDE",
+  //     slideState: false,
+  //   });
+  // };
+
+  const handleSignOut = () => {
+    if (user) {
+      auth.signOut();
+    }
   };
 
   return (
@@ -25,10 +32,12 @@ function Header() {
         <SearchIcon className="header__searchIcon" />
       </div>
       <div className="header__navbar">
-        <Link className="header__navbarItem" to="/login" onClick={headerClick}>
-          <div className="header__item">
-            <p className="header__itemUp">Hello Jomar</p>
-            <p className="header__itemBelow">Sign Out</p>
+        <Link className="header__navbarItem" to={!user && "/login"}>
+          <div className="header__item" onClick={handleSignOut}>
+            <p className="header__itemUp">
+              Hello {user ? user.email : "Guess"}
+            </p>
+            <p className="header__itemBelow">{user ? "Sign Out" : "Sign In"}</p>
           </div>
         </Link>
         <Link className="header__navbarItem">
