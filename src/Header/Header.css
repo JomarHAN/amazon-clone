@@ -5,10 +5,12 @@
   justify-content: space-around;
   align-items: center;
   height: 50px;
+  position: fixed;
+  z-index: 20;
 }
 
-.header__item > p,
-.header__cart > p {
+.header__item>p,
+.header__cart>p {
   color: white;
 }
 
@@ -74,16 +76,16 @@
     height: 25px;
   }
 
-  .header__logo{
-      flex: 0.2;
+  .header__logo {
+    flex: 0.2;
   }
 
-  .header__searchBox{
-      flex: 0.6;
+  .header__searchBox {
+    flex: 0.6;
   }
 
-  .header__navbar{
+  .header__navbar {
     flex: 0.4;
   }
-  
+
 }

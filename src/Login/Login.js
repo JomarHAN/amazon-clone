@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { useStateValue } from "../ContextAPI/StateProvider";
 import { auth } from "../firebase";
 import "./Login.css";
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import "./Header.css";
 import SearchIcon from "@material-ui/icons/Search";
@@ -7,7 +7,7 @@ import { useStateValue } from "../ContextAPI/StateProvider";
 import { auth } from "../firebase";
 
 function Header() {
-  const [{ user }] = useStateValue();
+  const [{ user, basket }] = useStateValue();
 
   // const headerClick = () => {
   //   dispatch({
@@ -52,12 +52,12 @@ function Header() {
             <p className="header__itemBelow">Prime</p>
           </div>
         </Link>
-        <Link className="header__navbarItem">
+        <Link className="header__navbarItem" to="/checkcart">
           <div className="header__cart">
             <p className="header__icon">
               <ShoppingCartIcon />
             </p>
-            <p className="header__amout">0</p>
+            <p className="header__amount">{basket?.length}</p>
           </div>
         </Link>
       </div>

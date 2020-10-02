@@ -1,6 +1,7 @@
 export const initialState = {
     slideState: true,
-    user: null
+    user: null,
+    basket: []
 }
 
 const reducer = (state, action) => {
@@ -15,6 +16,11 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 user: action.user
+            }
+        case "ADD_TO_BASKET":
+            return {
+                ...state,
+                basket: [...state.basket, action.item]
             }
 
         default:

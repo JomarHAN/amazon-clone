@@ -6,9 +6,10 @@ import Home from "./Home/Home";
 import Login from "./Login/Login";
 import { useStateValue } from "./ContextAPI/StateProvider";
 import { auth } from "./firebase";
+import CheckCart from "./CheckCart/CheckCart";
 
 function App() {
-  const [{}, dispatch] = useStateValue();
+  const [{ user }, dispatch] = useStateValue();
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
       if (authUser) {
@@ -23,14 +24,20 @@ function App() {
         });
       }
     });
-    return () => unsubscribe();
-  });
+    return () => {
+      unsubscribe();
+    };
+  }, [user]);
   return (
     <Router>
       <div className="app">
         <Switch>
           <Route path="/login">
             <Login />
+          </Route>
+          <Route path="/checkcart">
+            <Header />
+            <CheckCart />
           </Route>
           <Route path="/">
             <Header />
