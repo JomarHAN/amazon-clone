@@ -3,33 +3,32 @@ import { useStateValue } from "../../ContextAPI/StateProvider";
 import "./Slide.css";
 
 function Slide() {
-  const [{ slideState }] = useStateValue();
-  useEffect(() => {
-    const autoSlide = () => {
-      const list = document.querySelectorAll(".slide ul li");
-      setInterval(function () {
-        var currentIndex = 0;
-        var currentSlide = document.querySelector(".view");
-        for (
-          currentIndex = 0;
-          (currentSlide = currentSlide.previousElementSibling);
-          currentIndex++
-        ) {}
-        for (let i = 0; i < list.length; i++) {
-          list[i].classList.remove("view");
-        }
-        if (currentIndex < list.length - 1) {
-          list[currentIndex].nextElementSibling.classList.add("view");
-        } else {
-          list[0].classList.add("view");
-        }
-      }, 5000);
-    };
-    if (slideState) {
-      autoSlide();
-      console.log(slideState);
-    }
-  }, [slideState]);
+  // const [{ slideState }] = useStateValue();
+  // useEffect(() => {
+  //   const list = document.querySelectorAll(".slide ul li");
+  //   const autoSlide = setInterval(function () {
+  //     var currentIndex = 0;
+  //     var currentSlide = document.querySelector(".view");
+  //     for (
+  //       currentIndex = 0;
+  //       (currentSlide = currentSlide.previousElementSibling);
+  //       currentIndex++
+  //     ) {}
+  //     for (let i = 0; i < list.length; i++) {
+  //       list[i].classList.remove("view");
+  //     }
+  //     if (currentIndex < list.length - 1) {
+  //       list[currentIndex].nextElementSibling.classList.add("view");
+  //     } else {
+  //       list[0].classList.add("view");
+  //     }
+  //   }, 5000);
+  // }, []);
+
+  // if (!slideState) {
+  //   console.log("yes");
+  // }
+  // console.log(slideState);
   return (
     <div className="slide">
       <ul>

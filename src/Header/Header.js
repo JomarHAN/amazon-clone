@@ -7,6 +7,7 @@ import { useStateValue } from "../ContextAPI/StateProvider";
 
 function Header() {
   const [{}, dispatch] = useStateValue();
+
   const headerClick = () => {
     dispatch({
       type: "STOP_SLIDE",
