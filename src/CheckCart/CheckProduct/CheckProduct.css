@@ -1,0 +1,35 @@
+.checkproduct {
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid lightgray;
+}
+
+.checkproduct__image {
+    width: 180px;
+    height: 180px;
+    object-fit: contain;
+}
+
+.checkproduct__info {
+    padding: 20px;
+}
+
+.checkproduct__info>button {
+    border: 1px solid;
+    margin-top: 10px;
+    border-color: #a88734 #9c7e31 #846a29;
+    color: #111;
+    background: #f0c14b;
+    font-weight: bold;
+}
+
+.checkproduct__rating {
+    display: flex;
+}
+
+.checkproduct__title {
+    font-weight: 700;
+    font-size: 17px;
+}

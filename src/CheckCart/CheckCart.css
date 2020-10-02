@@ -1,3 +1,26 @@
 .checkCart {
-    transform: translateY(50px);
+  transform: translateY(50px);
+  display: flex;
+  padding: 20px;
+  background-color: white;
+  height: max-content;
+}
+
+.checkCart__ad {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.checkCart__left {
+  flex: 0.7;
+}
+
+.checkCart__right {
+  flex: 0.3;
+}
+
+.checkCart__title {
+  margin-right: 10px;
+  padding: 10px;
+  border-bottom: 1px solid lightgray;
 }
