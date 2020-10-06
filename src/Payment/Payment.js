@@ -9,7 +9,7 @@ import { getBasketTotal } from "../ContextAPI/reducer";
 import axios from "../axios";
 
 function Payment() {
-  const [{ basket, user }] = useStateValue();
+  const [{ basket, user }, dispatch] = useStateValue();
 
   const history = useHistory();
   const stripe = useStripe();
@@ -31,6 +31,8 @@ function Payment() {
     getClientSecret();
   }, [basket]);
 
+  console.log('the secret is >>>', clientSecret)
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setProcessing(true);
@@ -46,7 +48,11 @@ function Payment() {
         setError(null);
         setProcessing(false);
 
-        history.replaceState("/orders");
+        dispatch({
+          type: "EMPTY_BASKET",
+        })
+
+        history.replace("/orders");
       });
   };
 

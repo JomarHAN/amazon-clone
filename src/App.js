@@ -10,6 +10,7 @@ import CheckCart from "./CheckCart/CheckCart";
 import Payment from "./Payment/Payment";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
+import Orders from "./Orders/Orders";
 
 const promise = loadStripe(
   "pk_test_51HYyKtG3acrIAEXlSApmNndvJZO72NKUxnnOpMELeaBtANBy6HgejJiJRSV3R31xDiPB9Qj4PIV3goCI5Izz6LvP00X6rluZM0"
@@ -45,6 +46,10 @@ function App() {
           <Route path="/checkcart">
             <Header />
             <CheckCart />
+          </Route>
+          <Route path="/orders">
+            <Header />
+            <Orders />
           </Route>
           <Route path="/payment">
             <Header />
