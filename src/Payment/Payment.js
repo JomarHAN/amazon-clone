@@ -7,6 +7,7 @@ import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import CurrencyFormat from "react-currency-format";
 import { getBasketTotal } from "../ContextAPI/reducer";
 import axios from "../axios";
+import { db } from "../firebase";
 
 function Payment() {
   const [{ basket, user }, dispatch] = useStateValue();
@@ -31,7 +32,7 @@ function Payment() {
     getClientSecret();
   }, [basket]);
 
-  console.log('the secret is >>>', clientSecret)
+  console.log("the secret is >>>", clientSecret);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -47,11 +48,18 @@ function Payment() {
         setSucceeded(true);
         setError(null);
         setProcessing(false);
-
         dispatch({
           type: "EMPTY_BASKET",
-        })
-
+        });
+        db.collection("user")
+          .doc(user?.uid)
+          .collection("orders")
+          .doc(paymentIntent.id)
+          .set({
+            basket: basket,
+            amount: paymentIntent.amount,
+            created: paymentIntent.created,
+          });
         history.replace("/orders");
       });
   };

@@ -40,7 +40,7 @@ function Header() {
             <p className="header__itemBelow">{user ? "Sign Out" : "Sign In"}</p>
           </div>
         </Link>
-        <Link className="header__navbarItem">
+        <Link className="header__navbarItem" to="/orders">
           <div className="header__item">
             <p className="header__itemUp">Returns</p>
             <p className="header__itemBelow">& Orders</p>

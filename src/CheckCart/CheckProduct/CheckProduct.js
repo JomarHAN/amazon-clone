@@ -2,7 +2,7 @@ import React from "react";
 import { useStateValue } from "../../ContextAPI/StateProvider";
 import "./CheckProduct.css";
 
-function CheckProduct({ id, title, price, rating, image }) {
+function CheckProduct({ id, title, price, rating, image, hideButton }) {
   const [{}, dispatch] = useStateValue();
   const handleRemove = (e) => {
     e.preventDefault();
@@ -27,7 +27,7 @@ function CheckProduct({ id, title, price, rating, image }) {
               <p>⭐️</p>
             ))}
         </div>
-        <button onClick={handleRemove}>Remove Item</button>
+        {!hideButton && <button onClick={handleRemove}>Remove Item</button>}
       </div>
     </div>
   );

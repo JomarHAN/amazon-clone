@@ -1,3 +1,8 @@
 .orders {
-    transform: translateY(50px);
+  transform: translateY(50px);
+  padding: 20px 80px;
+}
+
+.orders > h1 {
+  margin: 10px 0;
 }
