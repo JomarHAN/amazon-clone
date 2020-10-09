@@ -1,68 +1,189 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## How to use Stripe in the project
 
-## Available Scripts
+1. npm i @stripe/stripe-js
+   npm i @stripe/react-stripe-js
+   
+2. in app.js 
+    import {loadStripe} from '@stripe/stripe-js'
+    import {Elements} from '@stripe/react-stripe-js'
+    
+    const promise = loadStripe("Stripe Publish Key")
+    
+    ==> wrap Payment component inside <Elements>
+      <Elements stripe={promise}>
+        <Payment />
+      </Elements>
+  
+3. In Payment component:
+  import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+  
+  inside function Payment {...}
+    const [disabled, setDisabled] = useState(true);
+    const [processing, setProcessing] = useState("");
+    const [succeeded, setSucceeded] = useState(false);
+    const [error, setError] = useState(null);
+    const stripe = useStripe();
+    const elements = useElements();
+    const history = useHistory();
+    
+    const handleChange = (e) => {
+      setError(e.error ? e.error.message : "");
+      setDisabled(e.empty);
+    };
+    
+    <div className="payment__detail">
+        <form onSubmit={handleSubmit}>
+          <CardElement onChange={handleChange} />
+          <div className="payment__priceContainer">
+            <CurrencyFormat
+              renderText={(value) => (
+                <>
+                  <p>
+                    Total: <strong>{`${value}`}</strong>
+                  </p>
+                </>
+              )}
+              decimalScale={2}
+              value={getBasketTotal(basket)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={"$"}
+            />
+            <button disabled={processing || disabled || succeeded}>
+              <span>{processing ? <p>Processing</p> : "Buy Now"}</span>
+            </button>
+          </div>
+          {error && <div>{error.message}</div>}
+        </form>
+      </div>
+ 
+ 4. Create axios.js file  ---> npm i axios
+     import axios from 'axios'
 
-In the project directory, you can run:
+      const instance = axios.create({
+          baseURL: "..." //API cloud function
+      })
 
-### `npm start`
+      export default instance
+      
+ 5. inside Payment component
+    const [clientSecret, setClientSecret] = useState(true);
+    
+    useEffect(() => {
+      const getClientSecret = async () => {
+        const response = await axios({
+          method: "post",
+          url: `/payments/create?total=${getBasketTotal(basket) * 100}`,
+        });
+        setClientSecret(response.data.clientSecret);
+      };
+      getClientSecret();
+    }, [basket]);
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      setProcessing(true);
+      const payload = await stripe
+        .confirmCardPayment(clientSecret, {
+          payment_method: {
+            card: elements.getElement(CardElement),
+          },
+        })
+        .then(({ paymentIntent }) => {
+          setSucceeded(true);
+          setError(null);
+          setProcessing(false);
+          history.replace("/orders");
+          dispatch({
+            type: "EMPTY_BASKET",
+          });
+          
+        });
+    };
+    
+  6. Cloud Function
+    - firebase init --> Functions ... --> ESlint...: Y --> install dependencies...: Y
+    - cd functions 
+    - npm i express , npm i cors , npm i stripe
+    const express = require('express')
+    const cors = require('cors')
+    const stripe = require('stripe')('sk_test_51HYyKtG3acrIAEXlEUlO57clRSnXFeTE3IdB0XZEdRZHiNJWhGfq8lxuocofuMjbsBTSmyFVUAiwlWOc2vb34NH700Quwl2A9j')
+    
+    //App Configuration
+    const app = express()
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+    //Middlewares
+    app.use(express.json())
+    app.use(cors({ origin: true }))
+    app.use((req, res, next) => {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        next();
+    })
 
-### `npm test`
+    //API routes
+    app.get('/', (req, res) => {
+        res.status(200).send('Hello there')
+    })
+    
+    //Listen Command
+    exports.api = functions.https.onRequest(app)
+    
+    in terminal: firebase emulators:start --> click functions api https://localhost:50001...
+    
+    in API routes:
+    app.post('/payments/create', async (req, res) => {
+        const total = req.query.total
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: total,
+            currency: 'usd'
+        })
+        res.status(201).send({
+            clientSecret: paymentIntent.client_secret
+        })
+    })
+    
+10. inside axios.js: paste api Endpoint just got into baseURL
+    inside Payment.js: test how payment works
+    
+11. Inside Payment:
+      - inside handleSubmit():
+          .then(({ paymentIntent }) => {
+              db.collection("users")
+                .doc(user?.uid)
+                .collection("orders")
+                .doc(paymentIntent.id)
+                .set({
+                  amount: paymentIntent.amount,
+                  basket: basket,
+                  created: paymentIntent.created,
+                });
+            });
+ 
+ 12. Create Orders component
+    useEffect(() => {
+        if (user) {
+          db.collection("users")
+            .doc(user?.uid)
+            .collection("orders")
+            .orderBy("created", "desc")
+            .onSnapshot((snapshot) =>
+              setOrders(
+                snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }))
+              )
+            );
+        } else {
+          setOrders([]);
+        }
+      }, []);
+      
+13. Create OrderItem component:
+     npm i moment
+     <p>{moment.unix(order.data.created).format("MMMM Do YYYY, h:mma")}</p>
+     
+14. Deploy cloud functions
+    - cut cloud fuction off
+    - firebase deploy --only functions
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+15. Deploy app:
+    - firebase deploy --only hosting
+          
