@@ -24,3 +24,27 @@
   padding: 10px;
   border-bottom: 1px solid lightgray;
 }
+
+@media only screen and (max-width: 768px){
+  .checkCart__left {
+    flex: 0.6;
+  }
+  
+  .checkCart__right {
+    flex: 0.4;
+  }
+}
+
+@media only screen and (max-width: 425px){
+  .checkCart{
+    flex-direction: column-reverse;
+  }
+
+  .checkCart__ad{
+    display: none;
+  }
+  
+  .checkCart__right {
+    flex: 1;
+  }
+}

@@ -14,6 +14,7 @@ function OrderItem({ order }) {
       </p>
       {order.data.basket?.map((item) => (
         <CheckProduct
+          key={item.id}
           id={item.id}
           title={item.title}
           price={item.price}

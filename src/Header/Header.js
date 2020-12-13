@@ -9,13 +9,6 @@ import { auth } from "../firebase";
 function Header() {
   const [{ user, basket }] = useStateValue();
 
-  // const headerClick = () => {
-  //   dispatch({
-  //     type: "STOP_SLIDE",
-  //     slideState: false,
-  //   });
-  // };
-
   const handleSignOut = () => {
     if (user) {
       auth.signOut();
@@ -35,7 +28,7 @@ function Header() {
         <Link className="header__navbarItem" to={!user && "/login"}>
           <div className="header__item" onClick={handleSignOut}>
             <p className="header__itemUp">
-              Hello {user ? user.email : "Guess"}
+              {user ? user.email : "Guess"}
             </p>
             <p className="header__itemBelow">{user ? "Sign Out" : "Sign In"}</p>
           </div>

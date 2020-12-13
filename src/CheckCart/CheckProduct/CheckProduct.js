@@ -3,7 +3,7 @@ import { useStateValue } from "../../ContextAPI/StateProvider";
 import "./CheckProduct.css";
 
 function CheckProduct({ id, title, price, rating, image, hideButton }) {
-  const [{}, dispatch] = useStateValue();
+  const [{ }, dispatch] = useStateValue();
   const handleRemove = (e) => {
     e.preventDefault();
     dispatch({

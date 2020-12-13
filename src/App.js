@@ -36,6 +36,7 @@ function App() {
       unsubscribe();
     };
   }, [user]);
+  document.title = "Amazon Clone";
   return (
     <Router>
       <div className="app">

@@ -23,19 +23,20 @@ function CheckCart() {
             </p>
           </div>
         ) : (
-          <>
-            <h2 className="checkCart__title">Your Shopping Cart</h2>
-            {basket?.map((item) => (
-              <CheckProduct
-                id={item.id}
-                title={item.title}
-                price={item.price}
-                rating={item.rating}
-                image={item.image}
-              />
-            ))}
-          </>
-        )}
+            <>
+              <h2 className="checkCart__title">Your Shopping Cart</h2>
+              {basket?.map((item) => (
+                <CheckProduct
+                  key={item.id}
+                  id={item.id}
+                  title={item.title}
+                  price={item.price}
+                  rating={item.rating}
+                  image={item.image}
+                />
+              ))}
+            </>
+          )}
       </div>
       <div className="checkCart__right">
         <Subtotal />
